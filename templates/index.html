@@ -4,199 +4,500 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartPrice AI | House Price Predictor</title>
+    <title>Blue State AI | Property Intelligence</title>
+
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --background: #f1f5f9;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --green: #059669;
+        }
+
         * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #0b1020;
-            color: #f4f7ff;
+            background: var(--background);
+            color: var(--text);
             min-height: 100vh;
         }
 
         header {
-            padding: 24px 8%;
-            border-bottom: 1px solid #222b43;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 6%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
         }
 
-        .logo { font-size: 22px; font-weight: 800; }
-        .logo span { color: #58a6ff; }
-        .tag { color: #a7b4d0; font-size: 13px; }
+        .logo {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .tag {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 7px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
 
         main {
-            max-width: 900px;
-            margin: 55px auto;
-            padding: 0 22px;
+            max-width: 1180px;
+            margin: 38px auto;
+            padding: 0 24px;
         }
 
-        .hero { text-align: center; margin-bottom: 35px; }
-        .hero h1 { font-size: clamp(30px, 5vw, 46px); margin-bottom: 12px; }
-        .hero p { color: #a7b4d0; line-height: 1.7; }
+        .hero { margin-bottom: 28px; }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4vw, 42px);
+            letter-spacing: -1.2px;
+            margin: 10px 0;
+        }
+
+        .hero p {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .stat-card, .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.035);
+        }
+
+        .stat-card { padding: 22px; }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .stat-value {
+            font-size: 23px;
+            font-weight: 750;
+            margin-top: 10px;
+        }
+
+        .stat-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+            gap: 22px;
+            align-items: start;
+        }
 
         .panel {
-            background: #121a2d;
-            border: 1px solid #26334f;
-            border-radius: 20px;
-            padding: 28px;
+            padding: 26px;
+            min-width: 0;
+        }
+
+        .panel-heading { margin-bottom: 22px; }
+
+        .panel-heading h2 {
+            font-size: 19px;
+            margin: 0 0 7px;
+        }
+
+        .panel-heading p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
+            gap: 18px;
         }
 
-        label { display: block; margin-bottom: 8px; font-size: 14px; }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
 
         input {
             width: 100%;
-            padding: 13px;
+            padding: 13px 12px;
             border-radius: 10px;
-            border: 1px solid #34415e;
-            background: #0b1020;
-            color: white;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        input:focus { border-color: #58a6ff; }
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
 
         button {
             width: 100%;
-            margin-top: 25px;
-            padding: 15px;
+            margin-top: 24px;
+            padding: 15px 20px;
             border: 0;
             border-radius: 11px;
-            background: #3984f5;
-            color: white;
-            font-size: 16px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
         }
 
-        button:hover { background: #2672e8; }
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
 
         .result {
             margin-top: 24px;
-            padding: 20px;
-            border-radius: 12px;
-            background: #102d2b;
-            border: 1px solid #23665a;
-            text-align: center;
+            padding: 22px;
+            border-radius: 14px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .result-label {
+            color: #047857;
+            font-size: 13px;
+            font-weight: 600;
         }
 
         .result strong {
             display: block;
-            color: #69e0b5;
-            font-size: 28px;
+            color: #065f46;
+            font-size: clamp(27px, 4vw, 36px);
             margin-top: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .result small {
+            display: block;
+            color: #047857;
+            margin-top: 8px;
+            line-height: 1.5;
         }
 
         .note {
-            color: #a7b4d0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+            margin-top: 20px;
+        }
+
+        .analysis-panel { margin-top: 24px; }
+
+        .chart-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .chart-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .map-placeholder {
+            min-height: 180px;
+            border-radius: 13px;
+            border: 1px solid #dbeafe;
+            background: linear-gradient(
+                135deg,
+                rgba(219, 234, 254, 0.85),
+                rgba(239, 246, 255, 0.95)
+            );
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 22px;
+        }
+
+        .map-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .map-placeholder strong { font-size: 15px; }
+
+        .map-placeholder p {
+            max-width: 270px;
+            color: var(--muted);
             font-size: 12px;
             line-height: 1.6;
-            margin-top: 22px;
+            margin-bottom: 0;
         }
 
         footer {
             text-align: center;
-            color: #71809e;
-            padding: 25px;
-            font-size: 13px;
+            color: var(--muted);
+            padding: 30px 20px;
+            font-size: 12px;
         }
 
-        @media (max-width: 600px) {
-            .grid { grid-template-columns: 1fr; }
-            .panel { padding: 20px; }
-            header { padding: 20px; }
+        @media (max-width: 800px) {
+            .content-grid { grid-template-columns: 1fr; }
+
+            header {
+                padding: 18px 24px;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 520px) {
+            main {
+                margin-top: 28px;
+                padding: 0 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-card { padding: 18px; }
+            .panel { padding: 19px; }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .tag { line-height: 1.5; }
         }
     </style>
 </head>
+
 <body>
     <header>
-        <div class="logo">SmartPrice<span>.AI</span></div>
-        <div class="tag">Machine Learning Project</div>
+        <div>
+            <div class="logo">Blue State<span> AI</span></div>
+            <div class="status">
+                <span class="status-dot"></span>
+                Machine Learning Demo
+            </div>
+        </div>
+
+        <div class="tag">Property Intelligence Platform</div>
     </header>
 
     <main>
         <section class="hero">
-            <h1>Estimate Your Home's Value</h1>
-            <p>Enter property and location details to get an AI-generated estimate.</p>
+            <div class="eyebrow">AI-powered property analytics</div>
+            <h1>Understand Property Value.</h1>
+            <p>
+                Explore housing data and generate a machine-learning estimate
+                based on property characteristics and location.
+            </p>
         </section>
 
-        <section class="panel">
-            <form method="POST">
-                <div class="grid">
-                    <div>
-                        <label for="MedInc">Median Income (dataset units)</label>
-                        <input id="MedInc" name="MedInc" type="number"
-                               min="0" step="any" value="5" required>
-                    </div>
-                    <div>
-                        <label for="HouseAge">House Age (years)</label>
-                        <input id="HouseAge" name="HouseAge" type="number"
-                               min="0" step="any" value="20" required>
-                    </div>
-                    <div>
-                        <label for="AveRooms">Average Rooms</label>
-                        <input id="AveRooms" name="AveRooms" type="number"
-                               min="0" step="any" value="5" required>
-                    </div>
-                    <div>
-                        <label for="AveBedrms">Average Bedrooms</label>
-                        <input id="AveBedrms" name="AveBedrms" type="number"
-                               min="0" step="any" value="1" required>
-                    </div>
-                    <div>
-                        <label for="Population">Area Population</label>
-                        <input id="Population" name="Population" type="number"
-                               min="0" step="any" value="1000" required>
-                    </div>
-                    <div>
-                        <label for="AveOccup">Average Occupancy</label>
-                        <input id="AveOccup" name="AveOccup" type="number"
-                               min="0.1" step="any" value="3" required>
-                    </div>
-                    <div>
-                        <label for="Latitude">Latitude</label>
-                        <input id="Latitude" name="Latitude" type="number"
-                               min="32" max="42" step="any" value="34" required>
-                    </div>
-                    <div>
-                        <label for="Longitude">Longitude</label>
-                        <input id="Longitude" name="Longitude" type="number"
-                               min="-125" max="-114" step="any" value="-120" required>
-                    </div>
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Technology</div>
+                <div class="stat-value">Machine Learning</div>
+                <div class="stat-description">Random Forest regression model</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Data Source</div>
+                <div class="stat-value">California</div>
+                <div class="stat-description">California Housing dataset</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">Platform</div>
+                <div class="stat-value">Blue State AI</div>
+                <div class="stat-description">Property analytics demo</div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Property Valuation</h2>
+                    <p>
+                        Enter the property and area characteristics to generate
+                        a model-based estimate.
+                    </p>
                 </div>
 
-                <button type="submit">Predict Home Value →</button>
-            </form>
+                <form method="POST">
+                    <div class="grid">
+                        <div>
+                            <label for="MedInc">Median Income (dataset units)</label>
+                            <input id="MedInc" name="MedInc" type="number"
+                                   min="0" step="any" value="5" required>
+                        </div>
 
-            {% if prediction is not none %}
-            <div class="result">
-                Estimated value
-                <strong>${{ "{:,.0f}".format(prediction) }}</strong>
+                        <div>
+                            <label for="HouseAge">House Age (years)</label>
+                            <input id="HouseAge" name="HouseAge" type="number"
+                                   min="0" step="any" value="20" required>
+                        </div>
+
+                        <div>
+                            <label for="AveRooms">Average Rooms</label>
+                            <input id="AveRooms" name="AveRooms" type="number"
+                                   min="0" step="any" value="5" required>
+                        </div>
+
+                        <div>
+                            <label for="AveBedrms">Average Bedrooms</label>
+                            <input id="AveBedrms" name="AveBedrms" type="number"
+                                   min="0" step="any" value="1" required>
+                        </div>
+
+                        <div>
+                            <label for="Population">Area Population</label>
+                            <input id="Population" name="Population" type="number"
+                                   min="0" step="any" value="1000" required>
+                        </div>
+
+                        <div>
+                            <label for="AveOccup">Average Occupancy</label>
+                            <input id="AveOccup" name="AveOccup" type="number"
+                                   min="0.1" step="any" value="3" required>
+                        </div>
+
+                        <div>
+                            <label for="Latitude">Latitude</label>
+                            <input id="Latitude" name="Latitude" type="number"
+                                   min="32" max="42" step="any" value="34" required>
+                        </div>
+
+                        <div>
+                            <label for="Longitude">Longitude</label>
+                            <input id="Longitude" name="Longitude" type="number"
+                                   min="-125" max="-114" step="any" value="-120" required>
+                        </div>
+                    </div>
+
+                    <button type="submit">Generate Property Estimate →</button>
+                </form>
+
+                {% if prediction is not none %}
+                <div class="result">
+                    <div class="result-label">Estimated Property Value</div>
+                    <strong>${{ "{:,.0f}".format(prediction) }}</strong>
+                    <small>
+                        Model-generated estimate based on the supplied features.
+                    </small>
+                </div>
+                {% endif %}
+
+                <p class="note">
+                    This demonstration uses the California Housing dataset.
+                    Estimates are experimental and are not official property
+                    valuations or estimates of Omani property prices.
+                </p>
             </div>
-            {% endif %}
 
-            <p class="note">
-                This demo uses the California Housing dataset. Predictions are
-                experimental estimates, not official property valuations.
-            </p>
+            <div class="panel">
+                <div class="panel-heading">
+                    <h2>Location Intelligence</h2>
+                    <p>
+                        Geographic features are included in the machine-learning
+                        model.
+                    </p>
+                </div>
+
+                <div class="map-placeholder">
+                    <div class="map-icon">⌖</div>
+                    <strong>Geographic Analysis</strong>
+                    <p>
+                        Latitude and longitude are used as model inputs.
+                        An interactive property map can be added in a future version.
+                    </p>
+                </div>
+
+                <p class="note">
+                    The current model was trained on California data. Its
+                    estimates should not be interpreted as reliable valuations
+                    for other regions.
+                </p>
+            </div>
+        </section>
+
+        <section class="panel analysis-panel">
+            <div class="panel-heading">
+                <h2>Housing Data Analysis</h2>
+                <p>
+                    Explore the relationship between dataset features and
+                    median house value.
+                </p>
+            </div>
+
+            <div class="chart-container">
+                <img
+                    src="{{ url_for('static', filename='correlation_chart.png') }}"
+                    alt="Feature correlation with house value"
+                >
+            </div>
         </section>
     </main>
 
-    <section class="panel">
-    <h2>House Price Analysis</h2>
-    <img src="{{ url_for('static', filename='correlation_chart.png') }}"
-         alt="Feature Correlation with House Value"
-         style="width:100%; max-width:800px; border-radius:12px;">
-</section>
-    <footer>SmartPrice AI · Built with Python &amp; Scikit-learn</footer>
+    <footer>
+        Blue State AI · Machine Learning Property Analytics
+    </footer>
 </body>
 </html>
