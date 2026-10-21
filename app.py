@@ -5,7 +5,13 @@ import pandas as pd
 
 app = Flask(__name__)
 
-model = joblib.load("house_price_model.pkl")
+import os
+
+if os.path.exists("house_price_model.pkl"):
+    model = joblib.load("house_price_model.pkl")
+else:
+    from train_model import train_and_save_model
+    model = train_and_save_model()
 
 @app.route("/", methods=["GET", "POST"])
 def home():
