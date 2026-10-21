@@ -1,503 +1,1352 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue State AI | Property Intelligence</title>
 
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --background: #f1f5f9;
-            --surface: #ffffff;
-            --text: #0f172a;
-            --muted: #64748b;
-            --border: #e2e8f0;
-            --green: #059669;
-        }
+       <meta charset="UTF-8">
 
-        * { box-sizing: border-box; }
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: var(--background);
-            color: var(--text);
-            min-height: 100vh;
-        }
+       <meta name="theme-color" content="#ffffff">
 
-        header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 6%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
 
-        .logo {
-            font-size: 23px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
 
-        .logo span { color: var(--primary); }
+       <title>Blue State | Property Valuation</title>
 
-        .tag {
-            color: var(--muted);
-            font-size: 13px;
-        }
+      <meta name="description" content="Blue State provides property valuation and housing market insights.">
 
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            color: var(--green);
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 7px;
-        }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10b981;
-        }
 
-        main {
-            max-width: 1180px;
-            margin: 38px auto;
-            padding: 0 24px;
-        }
+       <script src="https\://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 
-        .hero { margin-bottom: 28px; }
 
-        .eyebrow {
-            color: var(--primary);
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
 
-        .hero h1 {
-            font-size: clamp(30px, 4vw, 42px);
-            letter-spacing: -1.2px;
-            margin: 10px 0;
-        }
+       <style>
 
-        .hero p {
-            color: var(--muted);
-            line-height: 1.7;
-            max-width: 650px;
-            margin: 0;
-        }
+           :root {
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
-            margin: 28px 0;
-        }
+               --blue: #2563eb;
 
-        .stat-card, .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.035);
-        }
+               --blue-dark: #1d4ed8;
 
-        .stat-card { padding: 22px; }
+               --navy: #101828;
 
-        .stat-label {
-            color: var(--muted);
-            font-size: 13px;
-        }
+               --muted: #667085;
 
-        .stat-value {
-            font-size: 23px;
-            font-weight: 750;
-            margin-top: 10px;
-        }
+               --border: #e4eaf2;
 
-        .stat-description {
-            color: var(--muted);
-            font-size: 12px;
-            margin-top: 7px;
-        }
+               --background: #f4f7fb;
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-            gap: 22px;
-            align-items: start;
-        }
+               --white: #ffffff;
 
-        .panel {
-            padding: 26px;
-            min-width: 0;
-        }
+               --green: #047857;
 
-        .panel-heading { margin-bottom: 22px; }
+           }
 
-        .panel-heading h2 {
-            font-size: 19px;
-            margin: 0 0 7px;
-        }
 
-        .panel-heading p {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.6;
-            margin: 0;
-        }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-        }
+           * {
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            font-weight: 600;
-        }
+               box-sizing: border-box;
 
-        input {
-            width: 100%;
-            padding: 13px 12px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e1;
-            background: #fff;
-            color: var(--text);
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
+           }
 
-        input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-        }
 
-        button {
-            width: 100%;
-            margin-top: 24px;
-            padding: 15px 20px;
-            border: 0;
-            border-radius: 11px;
-            background: var(--primary);
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.2s;
-        }
 
-        button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
+           body {
 
-        .result {
-            margin-top: 24px;
-            padding: 22px;
-            border-radius: 14px;
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-        }
+               margin: 0;
 
-        .result-label {
-            color: #047857;
-            font-size: 13px;
-            font-weight: 600;
-        }
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
 
-        .result strong {
-            display: block;
-            color: #065f46;
-            font-size: clamp(27px, 4vw, 36px);
-            margin-top: 8px;
-            overflow-wrap: anywhere;
-        }
+                            Roboto, Helvetica, Arial, sans-serif;
 
-        .result small {
-            display: block;
-            color: #047857;
-            margin-top: 8px;
-            line-height: 1.5;
-        }
+               color: var(--navy);
 
-        .note {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.7;
-            margin-top: 20px;
-        }
+               background: var(--background);
 
-        .analysis-panel { margin-top: 24px; }
+               line-height: 1.6;
 
-        .chart-container {
-            width: 100%;
-            overflow: hidden;
-        }
+           }
 
-        .chart-container img {
-            display: block;
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
 
-        .map-placeholder {
-            min-height: 180px;
-            border-radius: 13px;
-            border: 1px solid #dbeafe;
-            background: linear-gradient(
-                135deg,
-                rgba(219, 234, 254, 0.85),
-                rgba(239, 246, 255, 0.95)
-            );
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 22px;
-        }
 
-        .map-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
+           button, input {
 
-        .map-placeholder strong { font-size: 15px; }
+               font: inherit;
 
-        .map-placeholder p {
-            max-width: 270px;
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
+           }
 
-        footer {
-            text-align: center;
-            color: var(--muted);
-            padding: 30px 20px;
-            font-size: 12px;
-        }
 
-        @media (max-width: 800px) {
-            .content-grid { grid-template-columns: 1fr; }
 
-            header {
-                padding: 18px 24px;
-                flex-wrap: wrap;
-            }
-        }
+           a {
 
-        @media (max-width: 520px) {
-            main {
-                margin-top: 28px;
-                padding: 0 15px;
-            }
+               color: inherit;
 
-            .stats {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
+               text-decoration: none;
 
-            .stat-card { padding: 18px; }
-            .panel { padding: 19px; }
+           }
 
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
 
-            .tag { line-height: 1.5; }
-        }
-    </style>
+
+           .navbar {
+
+               position: sticky;
+
+               top: 0;
+
+               z-index: 10;
+
+               background: rgba(255, 255, 255, 0.94);
+
+               backdrop-filter: blur(14px);
+
+               border-bottom: 1px solid var(--border);
+
+           }
+
+
+
+           .nav-inner {
+
+               max-width: 1180px;
+
+               margin: auto;
+
+               padding: 17px 24px;
+
+               display: flex;
+
+               align-items: center;
+
+               justify-content: space-between;
+
+               gap: 20px;
+
+           }
+
+
+
+           .brand {
+
+               display: flex;
+
+               align-items: center;
+
+               gap: 11px;
+
+               font-size: 19px;
+
+               font-weight: 800;
+
+               letter-spacing: -0.5px;
+
+           }
+
+
+
+           .brand-icon {
+
+               width: 40px;
+
+               height: 40px;
+
+               display: grid;
+
+               place-items: center;
+
+               border-radius: 12px;
+
+               color: white;
+
+               background: linear-gradient(135deg, #2563eb, #60a5fa);
+
+               box-shadow: 0 5px 14px #2563eb30;
+
+           }
+.nav-label {
+
+               color: var(--muted);
+
+               font-size: 13px;
+
+           }
+
+
+
+           .hero {
+
+               background:
+
+                   radial-gradient(ellipse at 80% 10%, #dbeafe 0, transparent 45%),
+
+                   linear-gradient(180deg, #ffffff, #f4f7fb);
+
+               border-bottom: 1px solid var(--border);
+
+           }
+
+
+
+           .hero-inner {
+
+               max-width: 1180px;
+
+               margin: auto;
+
+               padding: 70px 24px 60px;
+
+           }
+
+
+
+           .eyebrow {
+
+               display: inline-flex;
+
+               align-items: center;
+
+               gap: 8px;
+
+               color: var(--blue-dark);
+
+               background: #eaf1ff;
+
+               border: 1px solid #d6e4ff;
+
+               border-radius: 100px;
+
+               padding: 7px 13px;
+
+               font-size: 12px;
+
+               font-weight: 700;
+
+           }
+
+
+
+           .hero h1 {
+
+               max-width: 760px;
+
+               margin: 20px 0 14px;
+
+               font-size: clamp(36px, 5vw, 58px);
+
+               letter-spacing: -2px;
+
+               line-height: 1.12;
+
+           }
+
+
+
+           .hero h1 span {
+
+               color: var(--blue);
+
+           }
+
+
+
+           .hero p {
+
+               max-width: 680px;
+
+               margin: 0;
+
+               color: var(--muted);
+
+               font-size: 17px;
+
+           }
+
+
+
+           .hero-stats {
+
+               display: flex;
+
+               flex-wrap: wrap;
+
+               gap: 12px;
+
+               margin-top: 28px;
+
+           }
+
+
+
+           .stat {
+
+               padding: 10px 15px;
+
+               background: #ffffffb8;
+
+               border: 1px solid var(--border);
+
+               border-radius: 12px;
+
+               color: #344054;
+
+               font-size: 13px;
+
+           }
+
+
+
+           .stat strong {
+
+               color: var(--navy);
+
+           }
+
+
+
+           .container {
+
+               max-width: 1180px;
+
+               margin: auto;
+
+               padding: 32px 24px 60px;
+
+           }
+
+
+
+           .section-heading {
+
+               margin-bottom: 20px;
+
+           }
+
+
+
+           .section-heading h2 {
+
+               margin: 0 0 5px;
+
+               font-size: 23px;
+
+               letter-spacing: -0.5px;
+
+           }
+
+
+
+           .section-heading p {
+
+               margin: 0;
+
+               color: var(--muted);
+
+               font-size: 14px;
+
+           }
+
+
+
+           .workspace {
+
+               display: grid;
+
+               grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+
+               gap: 22px;
+
+               align-items: start;
+
+           }
+
+
+
+           .card {
+
+               min-width: 0;
+
+               padding: 26px;
+
+               background: var(--white);
+
+               border: 1px solid var(--border);
+
+               border-radius: 20px;
+
+               box-shadow: 0 8px 28px #182b4b08;
+
+           }
+
+
+
+           .card-heading {
+
+               margin-bottom: 23px;
+
+           }
+
+
+
+           .card-heading h3 {
+
+               margin: 0 0 5px;
+
+               font-size: 18px;
+
+           }
+
+
+
+           .card-heading p {
+
+               margin: 0;
+
+               color: var(--muted);
+
+               font-size: 13px;
+
+           }
+
+
+
+           .form-grid {
+
+               display: grid;
+
+               grid-template-columns: repeat(2, minmax(0, 1fr));
+
+               gap: 18px 16px;
+
+           }
+
+
+
+           .field label {
+
+               display: block;
+
+               margin-bottom: 7px;
+
+               font-size: 13px;
+
+               font-weight: 650;
+
+               color: #344054;
+
+           }
+
+
+
+           .field input {
+
+               width: 100%;
+
+               min-width: 0;
+
+               padding: 12px 13px;
+
+               color: var(--navy);
+
+               background: #ffffff;
+
+               border: 1px solid #d0d9e6;
+
+               border-radius: 10px;
+
+               outline: none;
+
+               transition: border-color .2s, box-shadow .2s;
+
+           }
+
+
+
+           .field input:focus {
+
+               border-color: var(--blue);
+
+               box-shadow: 0 0 0 3px #2563eb18;
+
+           }
+
+
+
+           .field small {
+
+               display: block;
+
+               margin-top: 5px;
+
+               color: #98a2b3;
+
+               font-size: 11px;
+
+           }
+
+
+
+           .submit-btn {
+
+               width: 100%;
+
+               margin-top: 23px;
+
+               padding: 14px 18px;
+
+               border: none;
+
+               border-radius: 11px;
+
+               color: white;
+
+               background: var(--blue);
+
+               font-weight: 750;
+
+               cursor: pointer;
+
+               transition: *background* .2s, transform .2s;
+
+           }
+
+
+
+           .submit-btn:hover {
+
+               background: var(--blue-dark);
+
+               transform: translateY(-1px);
+
+           }
+
+
+
+           .result {
+
+               margin-top: 22px;
+
+               padding: 20px;
+
+               background: #ecfdf5;
+
+               border: 1px solid #a7f3d0;
+
+               border-radius: 14px;
+
+           }
+
+
+
+           .result-label {
+
+               color: var(--green);
+
+               font-size: 13px;
+
+               font-weight: 750;
+
+           }
+
+
+
+           .result-value {
+
+               margin: 4px 0;
+
+               color: #065f46;
+
+               font-size: clamp(29px, 4vw, 38px);
+
+               font-weight: 850;
+
+               letter-spacing: -1px;
+
+               overflow-wrap: anywhere;
+
+           }
+
+
+
+           .result-note {
+
+               color: #047857;
+
+               font-size: 12px;
+
+           }
+
+
+
+           .notice {
+
+               margin-top: 18px;
+
+               padding: 14px;
+
+               color: #475467;
+
+               background: #f8fafc;
+
+               border-radius: 11px;
+
+               font-size: 12px;
+
+           }
+
+
+
+           .side-card {
+
+               background: linear-gradient(160deg, #ffffff, #f0f6ff);
+
+           }
+
+
+
+           .side-icon {
+
+               display: grid;
+
+               place-items: center;
+
+               width: 46px;
+
+               height: 46px;
+
+               margin-bottom: 16px;
+
+               border-radius: 14px;
+
+               color: var(--blue);
+
+               background: #e5edff;
+
+               font-size: 22px;
+
+           }
+
+
+
+           .side-card h3 {
+
+               margin: 0 0 8px;
+
+               font-size: 19px;
+
+           }
+
+
+
+           .side-card > p {
+
+               color: var(--muted);
+
+               font-size: 13px;
+
+               margin: 0 0 20px;
+
+           }
+
+
+
+           .feature {
+
+               display: flex;
+
+               gap: 11px;
+
+               margin-top: 17px;
+
+               align-items: flex-start;
+
+           }
+
+
+
+           .check {
+
+               display: grid;
+
+               place-items: center;
+
+               flex: 0 0 23px;
+
+               width: 23px;
+
+               height: 23px;
+
+               border-radius: 7px;
+
+               color: var(--blue);
+
+               background: #e5edff;
+
+               font-size: 12px;
+
+               font-weight: 800;
+
+           }
+
+
+
+           .feature strong {
+
+               display: block;
+
+               font-size: 13px;
+
+           }
+
+
+
+           .feature span {
+
+               display: block;
+
+               margin-top: 2px;
+
+               color: var(--muted);
+
+               font-size: 12px;
+
+           }
+
+
+
+           .analysis-section {
+
+               margin-top: 34px;
+
+           }
+
+
+
+           .analysis-card {
+
+               margin-top: 18px;
+
+           }
+
+
+
+           .chart-container {
+
+               width: 100%;
+
+               min-height: 340px;
+
+           }
+
+
+
+           .chart-container img {
+
+               display: block;
+
+               width: 100%;
+
+               height: auto;
+
+               border-radius: 10px;
+
+           }
+
+
+
+           .footer {
+
+               padding: 27px 24px;
+
+               border-top: 1px solid var(--border);
+
+               text-align: center;
+
+               color: var(--muted);
+
+               background: #ffffff;
+
+               font-size: 12px;
+
+           }
+
+
+
+           .footer strong {
+
+               color: #344054;
+
+           }
+
+
+
+           @media (max-width: 820px) {
+
+               .workspace {
+
+                   grid-template-columns: 1fr;
+
+               }
+
+
+
+               .hero-inner {
+
+                   padding-top: 48px;
+
+               }
+
+           }
+
+
+
+           @media (max-width: 520px) {
+
+               .nav-inner {
+
+                   padding: 13px 16px;
+
+               }
+
+
+
+               .nav-label {
+
+                   display: none;
+
+               }
+
+
+
+               .hero-inner {
+
+                   padding: 42px 18px;
+
+               }
+
+
+
+               .hero h1 {
+
+                   letter-spacing: -1px;
+
+               }
+
+
+
+               .container {
+
+                   padding: 24px 14px 40px;
+
+               }
+
+
+
+               .card {
+
+                   padding: 20px 16px;
+
+                   border-radius: 16px;
+
+               }
+
+
+
+               .form-grid {
+
+                   gap: 15px 11px;
+
+               }
+
+
+
+               .field input {
+
+                   padding: 11px 9px;
+
+               }
+
+           }
+
+       </style>
+
 </head>
 
+
+
 <body>
-    <header>
-        <div>
-            <div class="logo">Blue State<span> AI</span></div>
-            <div class="status">
-                <span class="status-dot"></span>
-                Machine Learning Demo
-            </div>
-        </div>
 
-        <div class="tag">Property Intelligence Platform</div>
-    </header>
+       <nav class="navbar">
 
-    <main>
-        <section class="hero">
-            <div class="eyebrow">AI-powered property analytics</div>
-            <h1>Understand Property Value.</h1>
-            <p>
-                Explore housing data and generate a machine-learning estimate
-                based on property characteristics and location.
-            </p>
-        </section>
+           <div class="nav-inner">
 
-        <section class="stats">
-            <div class="stat-card">
-                <div class="stat-label">Technology</div>
-                <div class="stat-value">Machine Learning</div>
-                <div class="stat-description">Random Forest regression model</div>
-            </div>
+               <a class="brand" href="/">
 
-            <div class="stat-card">
-                <div class="stat-label">Data Source</div>
-                <div class="stat-value">California</div>
-                <div class="stat-description">California Housing dataset</div>
-            </div>
+                   <span class="brand-icon">B</span>
 
-            <div class="stat-card">
-                <div class="stat-label">Platform</div>
-                <div class="stat-value">Blue State AI</div>
-                <div class="stat-description">Property analytics demo</div>
-            </div>
-        </section>
+                   <span>Blue State</span>
 
-        <section class="content-grid">
-            <div class="panel">
-                <div class="panel-heading">
-                    <h2>Property Valuation</h2>
-                    <p>
-                        Enter the property and area characteristics to generate
-                        a model-based estimate.
-                    </p>
-                </div>
+               </a>
 
-                <form method="POST">
-                    <div class="grid">
-                        <div>
-                            <label for="MedInc">Median Income (dataset units)</label>
-                            <input id="MedInc" name="MedInc" type="number"
-                                   min="0" step="any" value="5" required>
-                        </div>
+               <span class="nav-label">Property Valuation</span>
 
-                        <div>
-                            <label for="HouseAge">House Age (years)</label>
-                            <input id="HouseAge" name="HouseAge" type="number"
-                                   min="0" step="any" value="20" required>
-                        </div>
+           </div>
 
-                        <div>
-                            <label for="AveRooms">Average Rooms</label>
-                            <input id="AveRooms" name="AveRooms" type="number"
-                                   min="0" step="any" value="5" required>
-                        </div>
+       </nav>
 
-                        <div>
-                            <label for="AveBedrms">Average Bedrooms</label>
-                            <input id="AveBedrms" name="AveBedrms" type="number"
-                                   min="0" step="any" value="1" required>
-                        </div>
 
-                        <div>
-                            <label for="Population">Area Population</label>
-                            <input id="Population" name="Population" type="number"
-                                   min="0" step="any" value="1000" required>
-                        </div>
 
-                        <div>
-                            <label for="AveOccup">Average Occupancy</label>
-                            <input id="AveOccup" name="AveOccup" type="number"
-                                   min="0.1" step="any" value="3" required>
-                        </div>
+       <header class="hero">
 
-                        <div>
-                            <label for="Latitude">Latitude</label>
-                            <input id="Latitude" name="Latitude" type="number"
-                                   min="32" max="42" step="any" value="34" required>
-                        </div>
+           <div class="hero-inner">
 
-                        <div>
-                            <label for="Longitude">Longitude</label>
-                            <input id="Longitude" name="Longitude" type="number"
-                                   min="-125" max="-114" step="any" value="-120" required>
-                        </div>
-                    </div>
+               <div class="eyebrow">PROPERTY VALUATION PLATFORM</div>
 
-                    <button type="submit">Generate Property Estimate →</button>
-                </form>
+               <h1>Smarter insights for <span>property value.</span></h1>
 
-                {% if prediction is not none %}
-                <div class="result">
-                    <div class="result-label">Estimated Property Value</div>
-                    <strong>${{ "{:,.0f}".format(prediction) }}</strong>
-                    <small>
-                        Model-generated estimate based on the supplied features.
-                    </small>
-                </div>
-                {% endif %}
+               <p>
 
-                <p class="note">
-                    This demonstration uses the California Housing dataset.
-                    Estimates are experimental and are not official property
-                    valuations or estimates of Omani property prices.
-                </p>
-            </div>
+                   Explore property valuations and discover how housing
 
-            <div class="panel">
-                <div class="panel-heading">
-                    <h2>Location Intelligence</h2>
-                    <p>
-                        Geographic features are included in the machine-learning
-                        model.
-                    </p>
-                </div>
+                   features relate to estimated property values.
 
-                <div class="map-placeholder">
-                    <div class="map-icon">⌖</div>
-                    <strong>Geographic Analysis</strong>
-                    <p>
-                        Latitude and longitude are used as model inputs.
-                        An interactive property map can be added in a future version.
-                    </p>
-                </div>
+               </p>
 
-                <p class="note">
-                    The current model was trained on California data. Its
-                    estimates should not be interpreted as reliable valuations
-                    for other regions.
-                </p>
-            </div>
-        </section>
 
-        <section class="panel analysis-panel">
-            <div class="panel-heading">
-                <h2>Housing Data Analysis</h2>
-                <p>
-                    Explore the relationship between dataset features and
-                    median house value.
-                </p>
-            </div>
 
-            <div class="chart-container">
-                <img
-                    src="{{ url_for('static', filename='correlation_chart.png') }}"
-                    alt="Feature correlation with house value"
-                >
-            </div>
-        </section>
-    </main>
+               <div class="hero-stats">
 
-    <footer>
-        Blue State AI · Machine Learning Property Analytics
-    </footer>
+                   <div class="stat"><strong>Estimates</strong> · Property valuation</div>
+
+                   <div class="stat"><strong>Data</strong> · Housing analytics</div>
+
+                   <div class="stat"><strong>Interactive</strong> · Visual insights</div>
+
+               </div>
+
+           </div>
+
+       </header>
+
+
+
+       <main class="container">
+
+           <div class="section-heading">
+
+               <h2>Property Intelligence</h2>
+
+               <p>Enter the property characteristics to generate a model estimate.</p>
+
+           </div>
+
+
+
+           <div class="workspace">
+
+               <section class="card">
+
+                   <div class="card-heading">
+
+                       <h3>Property estimator</h3>
+
+                       <p>Complete the eight fields below.</p>
+
+                   </div>
+
+
+
+                   <form method="POST" action="/">
+
+                       <div class="form-grid">
+
+                           <div class="field">
+
+                               <label for="MedInc">Median income</label>
+
+                               <input id="MedInc" name="MedInc" type="number"
+
+                                      step="any" min="0" value="8.0" required>
+
+                               <small>Dataset income units</small>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="HouseAge">Median house age</label>
+
+                               <input id="HouseAge" name="HouseAge" type="number"
+
+                                      step="any" min="0" value="20" required>
+
+                               <small>Years</small>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="AveRooms">Average rooms</label>
+
+                               <input id="AveRooms" name="AveRooms" type="number"
+
+                                      step="any" min="0" value="5" required>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="AveBedrms">Average bedrooms</label>
+
+                               <input id="AveBedrms" name="AveBedrms" type="number"
+
+                                      step="any" min="0" value="1" required>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="Population">Population</label>
+
+                               <input id="Population" name="Population" type="number"
+
+                                      step="any" min="0" value="1000" required>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="AveOccup">Average occupancy</label>
+
+                               <input id="AveOccup" name="AveOccup" type="number"
+
+                                      step="any" min="0" value="3" required>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="Latitude">Latitude</label>
+
+                               <input id="Latitude" name="Latitude" type="number"
+
+                                      step="any" value="34" required>
+
+                           </div>
+
+
+
+                           <div class="field">
+
+                               <label for="Longitude">Longitude</label>
+
+                               <input id="Longitude" name="Longitude" type="number"
+
+                                      step="any" value="-120" required>
+
+                           </div>
+
+                       </div>
+
+
+
+                       <button class="submit-btn" type="submit">
+
+                           Generate Property Estimate →
+
+                       </button>
+
+                   </form>
+
+
+
+                   {% if prediction is not none %}
+
+                   <div class="result" aria-live="polite">
+
+                       <div class="result-label">Estimated Property Value</div>
+
+                       <div class="result-value">${{ "{:,.0f}".format(prediction) }}</div>
+
+                       <div class="result-note">
+
+                           Model-generated estimate based on the supplied features.
+
+                       </div>
+
+                   </div>
+
+                   {% endif %}
+
+
+
+                   <div class="notice">
+
+                       <strong>Important:</strong> This demonstration uses the
+
+                       California Housing dataset. Estimates are experimental,
+
+                       are not official property valuations, and should not be
+
+                       interpreted as estimates of Omani property prices.
+
+                   </div>
+
+               </section>
+
+
+
+               <aside class="card side-card">
+
+                   <div class="side-icon">✦</div>
+
+                   <h3>Data-driven perspective</h3>
+
+                   <p>
+
+                       Explore a machine learning workflow that transforms
+
+                       housing data into a model-generated estimate.
+
+                   </p>
+
+
+
+                   <div class="feature">
+
+                       <div class="check">✓</div>
+
+                       <div>
+
+                           <strong>Machine learning</strong>
+
+                           <span>A trained Random Forest regression model.</span>
+
+                       </div>
+
+                   </div>
+
+
+
+                   <div class="feature">
+
+                       <div class="check">✓</div>
+
+                       <div>
+
+                           <strong>Housing analytics</strong>
+
+                           <span>Explore correlations between dataset features and value.</span>
+
+                       </div>
+
+                   </div>
+
+
+
+                   <div class="feature">
+
+                       <div class="check">✓</div>
+
+                       <div>
+
+                           <strong>Interactive visualization</strong>
+
+                           <span>Explore the relationship between features and the target.</span>
+
+                       </div>
+
+                   </div>
+
+
+
+                   <div class="feature">
+
+                       <div class="check">i</div>
+
+                       <div>
+
+                           <strong>Know the limitations</strong>
+
+                           <span>Results depend on the dataset and are not a substitute for a professional appraisal.</span>
+
+                       </div>
+
+                   </div>
+
+               </aside>
+
+           </div>
+
+
+
+           <section class="analysis-section">
+
+               <div class="section-heading">
+
+                   <h2>Housing Data Analysis</h2>
+
+                   <p>
+
+                       Explore the relationship between dataset features
+
+                       and median house value.
+
+                   </p>
+
+               </div>
+
+
+
+               <div class="card analysis-card">
+
+                   <div class="chart-container">
+
+                       <img
+
+                           src="{{ url_for('static', filename='correlation_chart.png') }}"
+
+                           alt="Bar chart showing correlations between housing features and house value"
+
+                           loading="lazy">
+
+                   </div>
+
+               </div>
+
+
+
+               <div class="card analysis-card">
+
+                   <div class="card-heading">
+
+                       <h3>Interactive Feature Analysis</h3>
+
+                       <p>
+
+                           Compare selected dataset features with their
+
+                           correlation to house value.
+
+                       </p>
+
+                   </div>
+
+                   <div id="interactive-chart" class="chart-container"></div>
+
+               </div>
+
+           </section>
+
+       </main>
+
+
+
+       <footer class="footer">
+
+           <strong>Blue State</strong> · Property Valuation
+
+           <br>
+
+           <span>Property valuation and housing analytics</span>
+
+       </footer>
+
+
+
+       <script>
+
+           const trace = {
+
+               x: ['MedInc', 'AveRooms', 'HouseAge', 'AveOccup', 'Population'],
+
+               y: [0.688, 0.151, 0.106, -0.027, -0.029],
+
+               type: 'bar',
+
+               marker: {
+
+                   color: '#2563eb',
+
+                   line: { color: '#1d4ed8', width: 1 }
+
+               },
+
+               hovertemplate: '%{x}<br>Correlation: %{y:.3f}<extra></extra>'
+
+           };
+
+
+
+           const layout = {
+
+               title: {
+
+                   text: 'Feature Correlation with House Value',
+
+                   font: { size: 17, color: '#101828' }
+
+               },
+
+               xaxis: {
+
+                   title: 'Feature',
+
+                   automargin: true
+
+               },
+
+               yaxis: {
+
+                   title: 'Correlation',
+
+                   zeroline: true
+
+               },
+
+               template: 'plotly_white',
+
+               paper_bgcolor: '#ffffff',
+
+               plot_bgcolor: '#ffffff',
+
+               font: {
+
+                   family: 'Arial, sans-serif',
+
+                   color: '#475467'
+
+               },
+
+               margin: { t: 65, r: 20, b: 65, l: 55 }
+
+           };
+
+
+
+           Plotly.newPlot('interactive-chart', [trace], layout, {
+
+               responsive: true,
+
+               displaylogo: false
+
+           });
+
+       </script>
+
 </body>
+
 </html>
